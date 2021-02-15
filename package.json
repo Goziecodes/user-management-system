@@ -1,0 +1,11 @@
+{
+  "name": "netapps",
+  "version": "1.0.0",
+  "description": "user management system",
+  "main": "app",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "goziecodes",
+  "license": "ISC"
+}
