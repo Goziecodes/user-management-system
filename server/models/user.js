@@ -8,39 +8,19 @@ const UserSchema = new Schema({
   //     type: Number,
   //     required: true,
   //   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  email: { type: String, required: true, unique: true },
   username: { type: String, unique: true },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
-  state: {
-    type: String,
-  },
-  city: {
-    type: String,
-  },
-  blocked: {
-    type: Boolean,
-  },
-  verified: {
-    type: Boolean,
-  },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  password: { type: String },
+  address: { type: String },
+  state: { type: String },
+  city: { type: String },
+  blocked: { type: Boolean, default: false },
+  isVerified: { type: Boolean, default: false },
   role: { type: String, enum: ["admin", "user"] },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
