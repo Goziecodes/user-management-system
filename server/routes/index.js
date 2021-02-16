@@ -5,6 +5,7 @@ const smtpTransport = require("nodemailer-smtp-transport");
 const User = require("../models/user");
 const Token = require("../models/token");
 const router = express.Router();
+// require("dotenv").config();
 
 router.get("/", (req, res) => {
   res.send("welcome");
@@ -12,7 +13,6 @@ router.get("/", (req, res) => {
 
 router.post("/signup", (req, res) => {
   const { email, firstName, lastName, username, password } = req.body;
-  console.log(req.body);
   const newUser = new User({
     email,
     firstName,
@@ -40,11 +40,9 @@ router.post("/signup", (req, res) => {
                 auth: {
                   type: "oauth2",
                   user: "ezechukwuchigozie@gmail.com",
-                  clientId:
-                    "190767087066-sg2oilkjnip6qfjg6eul2ggol4bfjn7j.apps.googleusercontent.com",
-                  clientSecret: "PcZYCITXSy9J7KOtxyU2TS0X",
-                  refreshToken:
-                    "1//04HuTuuq3_wsGCgYIARAAGAQSNwF-L9IrZ0ZxIoy9807d9mtgvDYs0B4LutXqhivcrWK7cYgarSi3UI4BM41bX-JtjM4Gwji9Xa0",
+                  clientId: process.env.CLIENTID,
+                  clientSecret: process.env.CLIENTSECRET,
+                  refreshToken: process.env.REFRESHTOKEN,
                 },
                 from: "ezechukwuchigozie@gmail.com",
               });

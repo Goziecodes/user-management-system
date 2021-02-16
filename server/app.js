@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 passport = require("passport");
+const dotenv = require("dotenv").config();
+
 LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
