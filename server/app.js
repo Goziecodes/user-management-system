@@ -3,11 +3,28 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 passport = require("passport");
 const dotenv = require("dotenv").config();
-
 LocalStrategy = require("passport-local");
+const bodyParser = require("body-parser");
 const User = require("./models/user");
+const indexRoutes = require("./routes/index");
 
 const app = express();
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(
+  require("express-session")({
+    secret: "netapss user management system",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 mongoose
   .connect(`mongodb://localhost:27017/user-management`, {
@@ -17,24 +34,15 @@ mongoose
     console.error("Connection error", e.message);
   });
 
-app.use(
-  require("express-session")({
-    secret: "netapss user management system",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded());
-app.use(cors());
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const indexRoutes = require("./routes/index");
 app.use("/", indexRoutes);
 
 const PORT = process.env.PORT || 5000;

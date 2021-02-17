@@ -10,8 +10,14 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("welcome");
 });
+router.post("/a", (req, res) => {
+  console.log("kl");
+  res.status(200).send("ok");
+  // res.redirect("/");
+});
 
 router.post("/signup", (req, res) => {
+  console.log("registration started");
   const { email, firstName, lastName, username, password } = req.body;
   const newUser = new User({
     email,
@@ -60,13 +66,16 @@ router.post("/signup", (req, res) => {
                 } else {
                   console.log(`Email sent:  ${info.response}`);
                 }
+                res.status(200).send({ msg: "verify email" });
 
-                res.redirect("/verify");
+                // res.redirect("/verify");
               });
             }
           });
         }
       });
+    } else {
+      res.status(400).send({ msg: "user already exists" });
     }
   });
 });
@@ -92,13 +101,29 @@ router.post("/verify", (req, res) => {
   });
 });
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
+router.get("/user", (req, res) => {
+  res.send(req.user);
+});
 
+router.post("/login", (req, res, next) => {
+  console.log(req.body, "credentials");
+  passport.authenticate("local", function (err, user, info) {
+    console.log(user);
+    console.log(info);
+    console.log(err);
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(400).send({ msg: "NO user found" });
+    }
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
+      console.log("created");
+      res.status(200).send({ msg: "logged in", user: req.user });
+    });
+  })(req, res, next);
+});
 module.exports = router;
