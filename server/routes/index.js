@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const User = require("../models/user");
 const Token = require("../models/token");
+const { cloudinary } = require("../utills/cloudinary.js");
 const router = express.Router();
 // require("dotenv").config();
 
@@ -149,6 +150,29 @@ router.put("/update", function (req, res) {
       //     res.status(200).send(foundUser);
       //   }
       // });
+    }
+  });
+});
+
+router.post("/upload", (req, res) => {
+  User.findById(req.user._id, async (err, foundUser) => {
+    if (err) {
+      res.status(400).send({ msg: "no user found" });
+    } else {
+      // res.status(200).send(updateduser);
+      try {
+        console.log("started");
+        const fileStr = JSON.parse(req.body.data);
+        const uploadImage = await cloudinary.uploader.upload(fileStr, {
+          upload_preset: "profile_pic",
+        });
+        foundUser.image = uploadImage.secure_url;
+        foundUser.save();
+        res.status(200).send("profile picture updated");
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "something went wrong" });
+      }
     }
   });
 });

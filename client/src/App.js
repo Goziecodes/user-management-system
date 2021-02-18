@@ -10,6 +10,7 @@ import Nav from "./components/Nav.jsx";
 import NewPost from "./pages/newPost.jsx";
 import PostPage from "./components/PostPage.jsx";
 import ProfilePage from "./pages/profilePage.jsx";
+import UploadPicture from "./pages/uploadPicture.jsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/new" component={NewPost} />
           <Route exact path="/post" component={PostPage} />
           <Route exact path="/profile" component={ProfilePage} />
+          <Route exact path="/upload" component={UploadPicture} />
           {/* <Route exact path='/checkout' component={CheckoutPage} />
         <Route
           exact

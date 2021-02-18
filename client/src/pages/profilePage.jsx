@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function ProfilePage() {
   const [edit, setEdit] = useState(false);
   const [user, setUser] = useState({});
+  const [updated, setUpdated] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -31,7 +33,8 @@ function ProfilePage() {
         url: "http://localhost:5000/update",
       }).then((res) => {
         if (res.status === 200) {
-          setUser(() => res.data);
+          setUpdated("updated");
+          // setUser(() => res.data);
           //   console.log(res.data, "moooo");
         }
       });
@@ -48,7 +51,7 @@ function ProfilePage() {
         setUser(res.data);
       }
     });
-  }, []);
+  }, [updated]);
 
   const handleEdit = () => {
     setEdit((edit) => !edit);
@@ -62,11 +65,28 @@ function ProfilePage() {
           <div class="flex flex-wrap -m-4">
             <div class="p-4 md:w-1/3">
               <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-                <img
-                  class="lg:h-48 md:h-36 w-full object-cover object-center"
-                  src="https://dummyimage.com/720x400"
-                  alt="blog"
-                />
+                <div className="container relative mx-auto lg:h-48 md:h-36 h-36 w-60 bg-red-200">
+                  {user.image ? (
+                    <img
+                      class="lg:h-48 md:h-36 w-full object-cover object-center"
+                      src={user.image}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      class="lg:h-48 md:h-36 w-full object-cover object-center"
+                      src="https://dummyimage.com/720x400"
+                      alt=""
+                    />
+                  )}
+                  <button
+                    type="button"
+                    className="text-sm bg-indigo-400 text-white px-2 py rounded-full absolute bottom-5 left-48"
+                  >
+                    <Link to="/upload">Edit</Link>
+                  </button>
+                </div>
+
                 <div class="p-6">
                   <h2 class="tracking-widest text-sm title-font font-medium text-gray-900 mb-1">
                     Details
@@ -103,7 +123,7 @@ function ProfilePage() {
                       onClick={handleEdit}
                       class="bg-indigo-500 text-white px-5 py-2 rounded-full inline-flex items-center md:mb-2 lg:mb-0"
                     >
-                      Edit profile
+                      {edit ? "Done" : "Edit profile"}
                     </button>
                   </div>
                 </div>

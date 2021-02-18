@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   lastName: { type: String, required: true },
   password: { type: String },
   address: { type: String },
+  image: { type: String },
   state: { type: String },
   city: { type: String },
   blocked: { type: Boolean, default: false },
