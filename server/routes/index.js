@@ -102,7 +102,15 @@ router.post("/verify", (req, res) => {
 });
 
 router.get("/user", (req, res) => {
-  res.send(req.user);
+  res.status(200).send(req.user);
+});
+router.get("/logout", (req, res) => {
+  req.logOut(user, function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).send({ msg: "logged out" });
+  });
 });
 
 router.post("/login", (req, res, next) => {
@@ -125,5 +133,23 @@ router.post("/login", (req, res, next) => {
       res.status(200).send({ msg: "logged in", user: req.user });
     });
   })(req, res, next);
+});
+
+router.put("/update", function (req, res) {
+  User.findByIdAndUpdate(req.user._id, req.body, function (err, updateduser) {
+    if (err) {
+      res.status(400).send({ msg: "no user found" });
+    } else {
+      res.status(200).send(updateduser);
+
+      // User.findById(req.params.id, function (err, foundUser) {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     res.status(200).send(foundUser);
+      //   }
+      // });
+    }
+  });
 });
 module.exports = router;

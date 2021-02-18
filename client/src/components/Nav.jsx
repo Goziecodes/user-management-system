@@ -19,7 +19,7 @@ function Nav() {
 
   return (
     <>
-      <div className="w-full h-20 text-2xl bg-gray-400 flex justify-between items-center text-white px-10">
+      <div className="w-full h-10 text-md bg-gray-400 flex justify-between items-center text-white px-10">
         <div>
           <h1>{currentUser?.username}</h1>
         </div>

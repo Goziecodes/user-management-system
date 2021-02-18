@@ -7,6 +7,8 @@ LocalStrategy = require("passport-local");
 const bodyParser = require("body-parser");
 const User = require("./models/user");
 const indexRoutes = require("./routes/index");
+const postRoutes = require("./routes/posts");
+const commentRoutes = require("./routes/comments");
 
 const app = express();
 
@@ -43,7 +45,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use("/", indexRoutes);
+app.use(indexRoutes);
+app.use(postRoutes);
+app.use(commentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

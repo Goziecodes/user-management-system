@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Home() {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:5000/posts",
+    }).then((res) => {
+      setPosts(res.data);
+    });
+  }, []);
   return (
     <>
       <section class="text-gray-600 body-font">
@@ -28,35 +40,52 @@ function Home() {
             </button>
           </div>
 
-          <div class="flex flex-wrap -m-4">
-            <div class="xl:w-1/4 md:w-1/2 p-4">
-              <div class="bg-gray-100 p-6 rounded-lg">
-                {/* <img
-                  class="h-40 rounded w-full object-cover object-center mb-6"
-                  src="https://dummyimage.com/720x400"
-                  alt="content"
-                /> */}
-                <h3 class="tracking-widest text-blue-500 text-xs font-medium title-font">
-                  TITLE
-                </h3>
-                <h2 class="text-lg text-gray-900 font-medium title-font mb-4">
-                  Chichen Itza
-                </h2>
-                <p class="leading-relaxed text-base">
-                  Fingerstache flexitarian street art 8-bit waistcoat.
-                  Distillery hexagon disrupt edison bulbche.
-                </p>
-                <div className="w-full container mx-auto flex justify-center items-center">
-                  <button
-                    className="bg-white text-blue-500 text-2xl px-5 rounded-full"
-                    type="button"
-                  >
-                    <a href="/new">Read more...</a>
-                  </button>
+          {posts.length >= 0 ? (
+            posts.map((post) => (
+              <div key={post._id} class="flex flex-wrap -m-4">
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                  <div class="bg-gray-100 p-6 rounded-lg">
+                    <h3 class="tracking-widest text-blue-500 text-xs font-medium title-font">
+                      TITLE
+                    </h3>
+                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">
+                      {post.title}
+                    </h2>
+                    <p class="leading-relaxed text-base">
+                      {post.body.slice(0, 120)} ...
+                    </p>
+
+                    <h3 class="tracking-widest text-blue-500 text-xs font-medium title-font mt-2">
+                      AUTHOR
+                    </h3>
+                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">
+                      {post.author.username}
+                    </h2>
+
+                    <div className="w-full container mx-auto flex justify-center items-center mt-8">
+                      <button
+                        className="bg-white text-blue-500 text-2xl px-5 rounded-full"
+                        type="button"
+                      >
+                        <Link
+                          to={{
+                            pathname: "/post",
+                            state: {
+                              post: post,
+                            },
+                          }}
+                        >
+                          Read more...
+                        </Link>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>No posts yet, add Some!</p>
+          )}
         </div>
       </section>
     </>

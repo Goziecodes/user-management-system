@@ -14,13 +14,14 @@ function NewPost(props) {
       title: yup.string().required(" title is required."),
       body: yup.string().required(" body is required."),
     }),
+
     onSubmit: (values) => {
       console.log(values);
       axios({
         method: "POST",
         data: values,
         withCredentials: true,
-        url: "http://localhost:5000/new",
+        url: "http://localhost:5000/posts",
       }).then((res) => {
         if (res.status === 200) {
           // console.log(`meee ${JSON.stringify(res)}`);
