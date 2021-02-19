@@ -5,7 +5,7 @@ const AppShell = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="px-4 sm:px-8 py-2 bg-gray-100">{children}</div>
+      <div className="">{children}</div>
     </>
   );
 };

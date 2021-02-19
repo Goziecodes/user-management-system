@@ -8,15 +8,6 @@ const { cloudinary } = require("../utills/cloudinary.js");
 const router = express.Router();
 // require("dotenv").config();
 
-router.get("/", (req, res) => {
-  res.send("welcome");
-});
-router.post("/a", (req, res) => {
-  console.log("kl");
-  res.status(200).send("ok");
-  // res.redirect("/");
-});
-
 router.post("/signup", (req, res) => {
   console.log("registration started");
   const { email, firstName, lastName, username, password } = req.body;
@@ -81,8 +72,27 @@ router.post("/signup", (req, res) => {
   });
 });
 
+router.post("/updatePassword", (req, res) => {
+  const { password, token } = req.body;
+  Token.findOne({ token: token }, (err, foundToken) => {
+    if (!foundToken) {
+      return res.status(400).send({ msg: "your token may have expired" });
+    }
+    User.findOne({ _id: foundToken._userId }, (err, foundUser) => {
+      if (!foundUser)
+        return res.status(400).send({ msg: "no user found for this token" });
+      foundUser.setPassword(password, (err, user) => {
+        if (err) return res.status(500).send({ msg: err.message });
+        user.save();
+        res.status(200).send("password changed");
+      });
+    });
+  });
+});
+
 router.post("/verify", (req, res) => {
   const { email, token } = req.body;
+  console.log(email);
   Token.findOne({ token: token }, (err, foundToken) => {
     if (!foundToken)
       return res.status(400).send({ msg: "your token may have expired" });
@@ -99,6 +109,80 @@ router.post("/verify", (req, res) => {
         });
       }
     );
+  });
+});
+
+router.post("/confirmPasswordToken", (req, res) => {
+  const { token } = req.body;
+  console.log(token);
+  Token.findOne({ token: token }, (err, foundToken) => {
+    console.log(foundToken);
+    if (!foundToken) {
+      return res.status(400).send({ msg: "your token may have expired" });
+    }
+    return res.status(200).send({ msg: "token exists" });
+    // User.findOne(
+    //   { _id: foundToken._userId },
+    //   (err, foundUser) => {
+    //     if (!foundUser)
+    //       return res.status(400).send({ msg: "no user found for this token" });
+    //     foundUser.isVerified = true;
+    //     foundUser.save((err) => {
+    //       if (err) return res.status(500).send({ msg: err.message });
+    //       res.status(200).send("email has been verified");
+    //     });
+    //   }
+    // );
+  });
+});
+
+router.post("/forgot", (req, res) => {
+  const { email } = req.body;
+  console.log(email, "ok");
+  User.findOne({ email: email }, (err, foundUser) => {
+    if (!foundUser) return res.status(400).send("no user found for this email");
+
+    const token = new Token({
+      _userId: foundUser._id,
+      token: crypto.randomBytes(16).toString("hex"),
+    });
+
+    token.save((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            type: "oauth2",
+            user: "ezechukwuchigozie@gmail.com",
+            clientId: process.env.CLIENTID,
+            clientSecret: process.env.CLIENTSECRET,
+            refreshToken: process.env.REFRESHTOKEN,
+          },
+          from: "ezechukwuchigozie@gmail.com",
+        });
+
+        const mailOptions = {
+          from: "ezechukwuchigozie@gmail.com",
+          to: email,
+          subject: "Reset password",
+          text: `click this link to reset password.
+             http://${req.headers.host}/reset?token=${token.token}`,
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(`Email sent:  ${info.response}`);
+            res.status(200).send({ msg: "sent" });
+          }
+
+          // res.redirect("/verify");
+        });
+      }
+    });
   });
 });
 

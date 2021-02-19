@@ -34,7 +34,7 @@ function Login(props) {
           authContext.setAuthState(res.data.user);
           history.push("/");
         } else {
-          props.history.push("/login");
+          history.push("/login");
         }
       });
       // }).then((res) => console.log(`meee ${JSON.stringify(res)}`));
@@ -76,17 +76,35 @@ function Login(props) {
               >
                 Create Account 🚀
               </button>
+              <div className="flex justify-end">
+                {" "}
+                <button
+                  type="button"
+                  className="bg-green-600 px-2 py  rounded-md text-white"
+                >
+                  <Link
+                    className="no-underline  text-xs border-b border-blue text-blue "
+                    to="/forgot"
+                  >
+                    forgot password?
+                  </Link>
+                </button>
+              </div>
             </div>
 
             <div className="text-grey-dark flex justify-between w-4/5">
               <h3>Dont have an account?</h3>
-              <Link
-                className="no-underline border-b border-blue text-blue"
-                to="/signup"
+              <button
+                type="button"
+                className="bg-green-600 px-2 rounded-md text-white"
               >
-                Sign up
-              </Link>
-              .
+                <Link
+                  className="no-underline border-b border-blue text-blue "
+                  to="/signup"
+                >
+                  Sign up
+                </Link>
+              </button>
             </div>
           </div>
         </div>

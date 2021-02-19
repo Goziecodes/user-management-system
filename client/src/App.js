@@ -13,6 +13,8 @@ import ProfilePage from "./pages/profilePage.jsx";
 import UploadPicture from "./pages/uploadPicture.jsx";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import AppShell from "./AppShell";
+import Forgot from "./pages/forgot.jsx";
+import ResetPassword from "./pages/resetPassword.jsx";
 
 const LoadingFallback = () => (
   <AppShell>
@@ -40,9 +42,12 @@ const UnauthenticatedRoutes = () => (
     <Route exact path="/verify">
       <Verify />
     </Route>
-    {/* <Route path="*">
-      <FourOFour />
-    </Route> */}
+    <Route exact path="/forgot">
+      <Forgot />
+    </Route>
+    <Route exact path="/reset">
+      <ResetPassword />
+    </Route>
   </Switch>
 );
 
@@ -112,7 +117,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="bg-gray-100">
+        <div className="">
           <AppRoutes />
         </div>
       </AuthProvider>

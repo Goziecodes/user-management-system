@@ -59,11 +59,11 @@ function ProfilePage() {
 
   return (
     <>
-      <section className="text-gray-600 body-font">
-        <div className="container px-5 py-5 mx-auto">
+      <section className="text-gray-600 body-font w-full ">
+        <div className="container px-5 py-5 flex justify-center ">
           <div className="flex flex-wrap -m-4">
-            <div className="p-4 md:w-1/3">
-              <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+            <div className="p-4 ">
+              <div className="h-full border-2 border-gray-300 border-opacity-60 rounded-lg overflow-hidden">
                 <div className="container relative mx-auto lg:h-48 md:h-36 h-36 w-60 ">
                   {user.image ? (
                     <img
