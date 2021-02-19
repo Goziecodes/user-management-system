@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
 
 function NewPost(props) {
   const formik = useFormik({
@@ -16,7 +15,7 @@ function NewPost(props) {
     }),
 
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       axios({
         method: "POST",
         data: values,

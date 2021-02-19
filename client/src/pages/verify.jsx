@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Verify(props) {
   const formik = useFormik({
@@ -15,7 +15,7 @@ function Verify(props) {
       email: yup.string().email().required("email is required."),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       axios({
         method: "POST",
         data: values,
@@ -39,7 +39,7 @@ function Verify(props) {
         <div className="bg-grey-lighter min-h-screen flex flex-col">
           <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
             <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-              <h1 className="mb-8 text-3xl text-center">
+              <h1 className="mb-8 text-sm border-2 border-indigo-200  text-center">
                 Verify your Email with token sent to your mail before you can be
                 able to login{" "}
               </h1>

@@ -25,7 +25,7 @@ function ProfilePage() {
       state: yup.string().required("state is required."),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       axios({
         method: "PUT",
         data: values,
@@ -57,24 +57,23 @@ function ProfilePage() {
     setEdit((edit) => !edit);
   };
 
-  console.log(user, "mnmn");
   return (
     <>
-      <section class="text-gray-600 body-font">
-        <div class="container px-5 py-5 mx-auto">
-          <div class="flex flex-wrap -m-4">
-            <div class="p-4 md:w-1/3">
-              <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-                <div className="container relative mx-auto lg:h-48 md:h-36 h-36 w-60 bg-red-200">
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-5 mx-auto">
+          <div className="flex flex-wrap -m-4">
+            <div className="p-4 md:w-1/3">
+              <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                <div className="container relative mx-auto lg:h-48 md:h-36 h-36 w-60 ">
                   {user.image ? (
                     <img
-                      class="lg:h-48 md:h-36 w-full object-cover object-center"
+                      className="h-full  w-full object-cover object-center"
                       src={user.image}
                       alt=""
                     />
                   ) : (
                     <img
-                      class="lg:h-48 md:h-36 w-full object-cover object-center"
+                      className="lg:h-48 md:h-36 w-full object-cover object-center"
                       src="https://dummyimage.com/720x400"
                       alt=""
                     />
@@ -87,29 +86,29 @@ function ProfilePage() {
                   </button>
                 </div>
 
-                <div class="p-6">
-                  <h2 class="tracking-widest text-sm title-font font-medium text-gray-900 mb-1">
+                <div className="p-6">
+                  <h2 className="tracking-widest text-sm title-font font-medium text-gray-900 mb-1">
                     Details
                   </h2>
-                  <h2 class="title-font text-md font-medium text-gray-500 ">
+                  <h2 className="title-font text-md font-medium text-gray-500 ">
                     Full name:{" "}
                     <span className="text-indigo-800">{`${
                       user.firstName ? user.firstName : ""
                     } ${user.lastName ? user.lastName : ""}`}</span>
                   </h2>
-                  <h2 class="title-font text-md font-medium text-gray-500 ">
+                  <h2 className="title-font text-md font-medium text-gray-500 ">
                     User name:{" "}
                     <span className="text-indigo-800">{`${
                       user.username ? user.username : ""
                     }`}</span>
                   </h2>
-                  <h2 class="title-font text-md font-medium text-gray-500 ">
+                  <h2 className="title-font text-md font-medium text-gray-500 ">
                     adress:{" "}
                     <span className="text-indigo-800">{`${
                       user.address ? user.address : ""
                     }`}</span>
                   </h2>
-                  <h2 class="title-font text-md font-medium text-gray-500 ">
+                  <h2 className="title-font text-md font-medium text-gray-500 ">
                     city and state:{" "}
                     <span className="text-indigo-800">
                       {" "}
@@ -118,10 +117,10 @@ function ProfilePage() {
                       }`}
                     </span>
                   </h2>
-                  <div class="flex items-center flex-wrap justify-center mt-5">
+                  <div className="flex items-center flex-wrap justify-center mt-5">
                     <button
                       onClick={handleEdit}
-                      class="bg-indigo-500 text-white px-5 py-2 rounded-full inline-flex items-center md:mb-2 lg:mb-0"
+                      className="bg-indigo-500 text-white px-5 py-2 rounded-full inline-flex items-center md:mb-2 lg:mb-0"
                     >
                       {edit ? "Done" : "Edit profile"}
                     </button>

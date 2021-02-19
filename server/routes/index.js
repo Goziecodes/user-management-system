@@ -103,15 +103,13 @@ router.post("/verify", (req, res) => {
 });
 
 router.get("/user", (req, res) => {
+  console.log("getting user ...");
   res.status(200).send(req.user);
 });
 router.get("/logout", (req, res) => {
-  req.logOut(user, function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.status(200).send({ msg: "logged out" });
-  });
+  console.log("logging out...");
+  req.logOut();
+  res.status(200).send({ msg: "logged out" });
 });
 
 router.post("/login", (req, res, next) => {

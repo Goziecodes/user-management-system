@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SignUp(props) {
   const formik = useFormik({
@@ -31,7 +31,7 @@ function SignUp(props) {
       username: yup.string().required("User name is required."),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       axios({
         method: "POST",
         data: values,

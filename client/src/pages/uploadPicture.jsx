@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 function UploadPicture() {
-  const [fileInputState, setFileInputState] = useState("");
+  // const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState("");
 
   const handleFileInput = (e) => {
-    // console.log(e, "one");
-    // console.log(e.target.files[0], "two");
     const file = e.target.files[0];
     previewFile(file);
   };
@@ -22,13 +20,11 @@ function UploadPicture() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("im here");
     if (!previewSource) return;
     uploadImage(previewSource);
   };
 
   const uploadImage = async (image) => {
-    console.log(image);
     try {
       await axios({
         method: "POST",
@@ -62,7 +58,7 @@ function UploadPicture() {
                 <input
                   onChange={handleFileInput}
                   type="file"
-                  value={fileInputState}
+                  // value={fileInputState}
                   className="block text-sm border border-grey-light w-full p-3 rounded mb-4"
                   name="image"
                 />

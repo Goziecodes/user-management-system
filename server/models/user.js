@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   city: { type: String },
   blocked: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
-  role: { type: String, enum: ["admin", "user"] },
+  role: { type: String, enum: ["admin", "user"], default: "user" },
   passwordResetToken: String,
   passwordResetExpires: Date,
   posts: [

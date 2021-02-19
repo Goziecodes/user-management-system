@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function Login(props) {
-  //  useEffect(() => {
-  //   axios
-  //   .post
-  //  }, [])
+  const authContext = useContext(AuthContext);
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: {
@@ -24,7 +23,7 @@ function Login(props) {
         .required("Password is required."),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       axios({
         method: "POST",
         data: values,
@@ -32,9 +31,8 @@ function Login(props) {
         url: "http://localhost:5000/login",
       }).then((res) => {
         if (res.status === 200) {
-          // console.log(`meee ${JSON.stringify(res)}`);
-          console.log(props, "kkkppljh");
-          props.history.push("/");
+          authContext.setAuthState(res.data.user);
+          history.push("/");
         } else {
           props.history.push("/login");
         }
