@@ -9,6 +9,7 @@ const User = require("./models/user");
 const indexRoutes = require("./routes/index");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -48,6 +49,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use(indexRoutes);
 app.use(postRoutes);
 app.use(commentRoutes);
+app.use(adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

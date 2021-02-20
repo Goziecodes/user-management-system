@@ -2,8 +2,11 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 function NewPost(props) {
+  const history = useHistory();
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -24,9 +27,9 @@ function NewPost(props) {
       }).then((res) => {
         if (res.status === 200) {
           // console.log(`meee ${JSON.stringify(res)}`);
-          props.history.push("/");
+          history.push("/");
         } else {
-          props.history.push("/login");
+          history.push("/login");
         }
       });
     },

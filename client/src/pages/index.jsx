@@ -67,16 +67,20 @@ function Home() {
                         className="bg-white text-blue-500 text-2xl px-5 rounded-full"
                         type="button"
                       >
-                        <Link
+                        <Link to={`/post?postId=${post._id}`}>
+                          Read more...
+                        </Link>
+                        {/* <Link
                           to={{
-                            pathname: "/post",
+                            pathname: `/post?postId=${post._id}`,
+                            // pathname: "/post",
                             state: {
                               post: post,
                             },
                           }}
                         >
                           Read more...
-                        </Link>
+                        </Link> */}
                       </button>
                     </div>
                   </div>

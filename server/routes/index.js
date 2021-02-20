@@ -168,7 +168,7 @@ router.post("/forgot", (req, res) => {
           to: email,
           subject: "Reset password",
           text: `click this link to reset password.
-             http://${req.headers.host}/reset?token=${token.token}`,
+             http://localhost:3000/reset?token=${token.token}`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {

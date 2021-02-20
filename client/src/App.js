@@ -6,7 +6,7 @@ import Login from "./pages/login.jsx";
 import Home from "./pages/index.jsx";
 import SignUp from "./pages/signup.jsx";
 import Verify from "./pages/verify.jsx";
-// import Nav from "./components/Nav.jsx";
+import Nav from "./components/Nav.jsx";
 import NewPost from "./pages/newPost.jsx";
 import PostPage from "./components/PostPage.jsx";
 import ProfilePage from "./pages/profilePage.jsx";
@@ -15,6 +15,8 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 import AppShell from "./AppShell";
 import Forgot from "./pages/forgot.jsx";
 import ResetPassword from "./pages/resetPassword.jsx";
+import Admin from "./pages/admin.jsx";
+import AdminMore from "./components/AdminMore.jsx";
 
 const LoadingFallback = () => (
   <AppShell>
@@ -34,11 +36,6 @@ const UnauthenticatedRoutes = () => (
         <SignUp />
       </AppShell>
     </Route>
-    <Route exact path="/">
-      <AppShell>
-        <Home />
-      </AppShell>
-    </Route>
     <Route exact path="/verify">
       <Verify />
     </Route>
@@ -47,6 +44,21 @@ const UnauthenticatedRoutes = () => (
     </Route>
     <Route exact path="/reset">
       <ResetPassword />
+    </Route>
+    <Route exact path="/">
+      <AppShell>
+        <Home />
+      </AppShell>
+    </Route>
+    <Route exact path="/admin">
+      <AppShell>
+        <Admin />
+      </AppShell>
+    </Route>
+    <Route exact path="/admin/more">
+      <AppShell>
+        <AdminMore />
+      </AppShell>
     </Route>
   </Switch>
 );
@@ -97,9 +109,9 @@ const AppRoutes = () => {
             <PostPage />
           </AuthenticatedRoute>
 
-          <AuthenticatedRoute path="/post">
+          {/* <AuthenticatedRoute path="/post">
             <PostPage />
-          </AuthenticatedRoute>
+          </AuthenticatedRoute> */}
           <AuthenticatedRoute path="/profile">
             <ProfilePage />
           </AuthenticatedRoute>
@@ -128,7 +140,7 @@ function App() {
 // function App() {
 //   return (
 //     <>
-//       <Nav />
+//       {/* <Nav /> */}
 //       <BrowserRouter>
 //         <Switch>
 //           <Route exact path="/" component={Home} />

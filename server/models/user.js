@@ -19,13 +19,14 @@ const UserSchema = new Schema({
   city: { type: String },
   blocked: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
+  registerd_ip_address: { type: String },
+  last_login_date: { type: Date, default: Date.now() },
+  last_login_ipaddress: { type: String },
   role: { type: String, enum: ["admin", "user"], default: "user" },
-  passwordResetToken: String,
-  passwordResetExpires: Date,
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Posts",
+      ref: "Post",
     },
   ],
 });

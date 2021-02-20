@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function PostPage(props) {
   const [comments, setComments] = useState([]);
-  const post = props.location.state.post;
+  const [post, setPost] = useState([]);
+  const search = useLocation().search;
+  const postId = new URLSearchParams(search).get("postId");
+  // const post = props.location.state.post;
+  // console.log(postId, "ooo");
 
   const formik = useFormik({
     initialValues: {
@@ -20,7 +25,7 @@ function PostPage(props) {
         method: "POST",
         data: values,
         withCredentials: true,
-        url: `http://localhost:5000/comment/${post._id}`,
+        url: `http://localhost:5000/comment/${postId}`,
       }).then((res) => {
         if (res.status === 200) {
           setComments(res.data);
@@ -32,8 +37,21 @@ function PostPage(props) {
   });
 
   useEffect(() => {
-    setComments(() => post.comments);
-  }, [post.comments]);
+    axios({
+      method: "POST",
+      data: { id: postId },
+      withCredentials: true,
+      url: `http://localhost:5000/posts/${postId}`,
+    }).then((res) => {
+      if (res.status === 200) {
+        setPost(res.data);
+        setComments(() => res.data.comments);
+        // setComments(() => post.comments);
+      } else {
+        props.history.push("/verify");
+      }
+    });
+  }, [post.comments, postId, props.history]);
   return (
     <>
       <section className="text-gray-600 body-font">
