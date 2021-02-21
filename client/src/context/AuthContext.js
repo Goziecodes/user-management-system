@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const isAuthenticated = () => {
-    if (authState.userInfo) {
+    if (authState?.userInfo?.username) {
       return true;
     }
     return false;
@@ -45,11 +45,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const isBlocked = () => {
-    return authState?.userInfo.blocked;
+    return authState?.userInfo?.blocked;
   };
 
   const isVerified = () => {
-    return authState?.userInfo.isVerified;
+    return authState?.userInfo?.isVerified;
   };
 
   //   console.log(authState, "i am auth state");

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function ProfilePage() {
   const [edit, setEdit] = useState(false);
   const [user, setUser] = useState({});
   const [updated, setUpdated] = useState("");
+
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: {
@@ -31,13 +33,17 @@ function ProfilePage() {
         data: values,
         withCredentials: true,
         url: "http://localhost:5000/update",
-      }).then((res) => {
-        if (res.status === 200) {
-          setUpdated("updated");
-          // setUser(() => res.data);
-          //   console.log(res.data, "moooo");
-        }
-      });
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            setUpdated("updated");
+            // setUser(() => res.data);
+            //   console.log(res.data, "moooo");
+          }
+        })
+        .catch((error) => {
+          error.response.status === 400 && history.push("/login");
+        });
     },
   });
 
@@ -46,17 +52,21 @@ function ProfilePage() {
       method: "GET",
       withCredentials: true,
       url: "http://localhost:5000/user",
-    }).then((res) => {
-      if (res.status === 200) {
-        setUser(res.data);
-      }
-    });
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setUser(res.data);
+        }
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/login");
+      });
   }, [updated]);
 
   const handleEdit = () => {
     setEdit((edit) => !edit);
   };
-
+  console.log(user, "mine");
   return (
     <>
       <section className="text-gray-600 body-font w-full ">

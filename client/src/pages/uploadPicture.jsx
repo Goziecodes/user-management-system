@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 function UploadPicture() {
   // const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState("");
+  const history = useHistory();
 
   const handleFileInput = (e) => {
     const file = e.target.files[0];
@@ -33,12 +35,16 @@ function UploadPicture() {
         data: { data: JSON.stringify(image) },
         withCredentials: true,
         url: "http://localhost:5000/upload",
-      }).then((res) => {
-        if (res.status === 200) {
-          //   setUser(() => res.data);
-          console.log(res.data, "moooo");
-        }
-      });
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            //   setUser(() => res.data);
+            console.log(res.data, "moooo");
+          }
+        })
+        .catch((error) => {
+          error.response.status === 400 && history.push("/login");
+        });
     } catch (error) {
       console.log(error);
     }

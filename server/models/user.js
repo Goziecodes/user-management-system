@@ -20,7 +20,8 @@ const UserSchema = new Schema({
   blocked: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
   registerd_ip_address: { type: String },
-  last_login_date: { type: Date, default: Date.now() },
+  last_login_date: { type: Date, default: Date.now },
+  created: { type: Date, default: Date.now },
   last_login_ipaddress: { type: String },
   role: { type: String, enum: ["admin", "user"], default: "user" },
   posts: [

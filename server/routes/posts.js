@@ -1,10 +1,11 @@
 const express = require("express");
 const User = require("../models/user");
 const Post = require("../models/post");
+const auth = require("../middleware/auth");
+
 const router = express.Router();
 
 router.get("/posts", (req, res) => {
-  console.log("all post");
   Post.find({})
     .populate("comments")
     .exec((err, foundPosts) => {
@@ -13,7 +14,7 @@ router.get("/posts", (req, res) => {
     });
 });
 
-router.post("/posts/:postID", (req, res) => {
+router.post("/posts/:postID", auth.isAuthenticated, (req, res) => {
   Post.findById(req.params.postID)
     .populate("comments")
     .exec((err, foundPosts) => {
@@ -22,7 +23,7 @@ router.post("/posts/:postID", (req, res) => {
     });
 });
 
-router.get("/posts/:id", (req, res) => {
+router.get("/posts/:id", auth.isAuthenticated, (req, res) => {
   Post.findById(req.params.id)
     .populate("comments")
     .exec((err, foundPosts) => {
@@ -31,7 +32,7 @@ router.get("/posts/:id", (req, res) => {
     });
 });
 
-router.post("/posts", (req, res) => {
+router.post("/posts", auth.isAuthenticated, (req, res) => {
   console.log("started creating..");
   const { title, body } = req.body;
 

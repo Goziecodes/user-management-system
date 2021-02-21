@@ -74,7 +74,7 @@ function Login(props) {
                 type="submit"
                 className="w-full text-center py-3 rounded bg-green-600 text-white hover:bg-green-dark focus:outline-none my-1"
               >
-                Create Account 🚀
+                Login 🚀
               </button>
               <div className="flex justify-end">
                 {" "}

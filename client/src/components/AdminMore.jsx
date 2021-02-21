@@ -9,6 +9,7 @@ function AdminMore(props) {
   const [edituser, setEditUser] = useState(false);
   const [user, setUser] = useState({});
 
+  const history = useHistory();
   const search = useLocation().search;
   const userID = new URLSearchParams(search).get("userID");
 
@@ -37,11 +38,15 @@ function AdminMore(props) {
         data: values,
         withCredentials: true,
         url: `http://localhost:5000/admin/edit/${userID}`,
-      }).then((res) => {
-        if (res.status === 200) {
-          res.status === 200 && setEdited((edited) => !edited);
-        }
-      });
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            res.status === 200 && setEdited((edited) => !edited);
+          }
+        })
+        .catch((error) => {
+          error.response.status === 400 && history.push("/login");
+        });
     },
   });
 
@@ -49,10 +54,14 @@ function AdminMore(props) {
     axios({
       method: "GET",
       withCredentials: true,
-      url: `http://localhost:5000/user/${userID}`,
-    }).then((res) => {
-      res.status === 200 && setUser(res.data);
-    });
+      url: `http://localhost:5000/admin/user/${userID}`,
+    })
+      .then((res) => {
+        res.status === 200 && setUser(res.data);
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/");
+      });
   }, [userID, edited]);
 
   const handleBlock = () => {
@@ -60,9 +69,13 @@ function AdminMore(props) {
       method: "PUT",
       withCredentials: true,
       url: `http://localhost:5000/admin/block/${userID}`,
-    }).then((res) => {
-      res.status === 200 && setEdited((edited) => !edited);
-    });
+    })
+      .then((res) => {
+        res.status === 200 && setEdited((edited) => !edited);
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/");
+      });
   };
 
   const handleUnblock = () => {
@@ -70,9 +83,13 @@ function AdminMore(props) {
       method: "PUT",
       withCredentials: true,
       url: `http://localhost:5000/admin/unblock/${userID}`,
-    }).then((res) => {
-      res.status === 200 && setEdited((edited) => !edited);
-    });
+    })
+      .then((res) => {
+        res.status === 200 && setEdited((edited) => !edited);
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/");
+      });
   };
 
   console.log(user, "kokoko");

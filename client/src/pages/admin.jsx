@@ -1,18 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function Admin() {
   const [users, setUsers] = useState({});
+  const history = useHistory();
 
   useEffect(() => {
     axios({
       method: "GET",
       withCredentials: true,
       url: "http://localhost:5000/admin",
-    }).then((res) => {
-      res.status === 200 && setUsers(res.data);
-    });
+    })
+      .then((res) => {
+        res.status === 200 && setUsers(res.data);
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/login");
+      });
   }, []);
 
   console.log(users);

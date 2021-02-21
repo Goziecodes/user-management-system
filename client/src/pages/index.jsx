@@ -6,6 +6,10 @@ function Home() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     axios({
+      headers: {
+        // x-forwarded-for: 203.0.113.195
+        "x-forwarded-for": "203.0.113.195 ",
+      },
       method: "GET",
       withCredentials: true,
       url: "http://localhost:5000/posts",
@@ -17,7 +21,7 @@ function Home() {
     <>
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-wrap w-full mb-4">
+          <div className="flex flex-col flex-wrap w-full mb-4">
             <div className="lg:w-1/2 w-full mb-6 lg:mb-0">
               <h1 className="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">
                 Socialize today!
@@ -39,38 +43,42 @@ function Home() {
               <a href="/new">Add New Post</a>
             </button>
           </div>
+          <div className="flex flex-wrap -m-4">
+            {posts.length >= 0 ? (
+              posts
+                .slice(0)
+                .reverse()
+                .map((post) => (
+                  <div key={post._id} className=" w-full xl:w-1/4 md:w-1/2 p-4">
+                    <div className="bg-gray-100 w-full p-6 rounded-lg">
+                      <h3 className="tracking-widest text-blue-500 text-xs font-medium title-font">
+                        TITLE
+                      </h3>
+                      <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
+                        {post.title}
+                      </h2>
+                      <div className="">
+                        <p className="leading-relaxed text-base">
+                          {post.body.slice(0, 120)} ...
+                        </p>
+                      </div>
 
-          {posts.length >= 0 ? (
-            posts.map((post) => (
-              <div key={post._id} className="flex flex-wrap -m-4">
-                <div className="xl:w-1/4 md:w-1/2 p-4">
-                  <div className="bg-gray-100 p-6 rounded-lg">
-                    <h3 className="tracking-widest text-blue-500 text-xs font-medium title-font">
-                      TITLE
-                    </h3>
-                    <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
-                      {post.title}
-                    </h2>
-                    <p className="leading-relaxed text-base">
-                      {post.body.slice(0, 120)} ...
-                    </p>
+                      <h3 className="tracking-widest text-blue-500 text-xs font-medium title-font mt-2">
+                        AUTHOR
+                      </h3>
+                      <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
+                        {post.author.username}
+                      </h2>
 
-                    <h3 className="tracking-widest text-blue-500 text-xs font-medium title-font mt-2">
-                      AUTHOR
-                    </h3>
-                    <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
-                      {post.author.username}
-                    </h2>
-
-                    <div className="w-full container mx-auto flex justify-center items-center mt-8">
-                      <button
-                        className="bg-white text-blue-500 text-2xl px-5 rounded-full"
-                        type="button"
-                      >
-                        <Link to={`/post?postId=${post._id}`}>
-                          Read more...
-                        </Link>
-                        {/* <Link
+                      <div className="w-full container mx-auto flex justify-center items-center mt-8">
+                        <button
+                          className="bg-white text-blue-500 text-2xl px-5 rounded-full"
+                          type="button"
+                        >
+                          <Link to={`/post?postId=${post._id}`}>
+                            Read more...
+                          </Link>
+                          {/* <Link
                           to={{
                             pathname: `/post?postId=${post._id}`,
                             // pathname: "/post",
@@ -81,15 +89,15 @@ function Home() {
                         >
                           Read more...
                         </Link> */}
-                      </button>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No posts yet, add Some!</p>
-          )}
+                ))
+            ) : (
+              <p>No posts yet, add Some!</p>
+            )}
+          </div>
         </div>
       </section>
     </>

@@ -1,9 +1,10 @@
 const express = require("express");
 const User = require("../models/user");
-const router = express.Router();
-// require("dotenv").config();
+const auth = require("../middleware/auth");
 
-router.get("/admin", (req, res) => {
+const router = express.Router();
+
+router.get("/admin", auth.isAdmin, (req, res) => {
   console.log("getting users ...");
   User.find({}, (err, users) => {
     if (err) {
@@ -14,7 +15,7 @@ router.get("/admin", (req, res) => {
   });
 });
 
-router.get("/user/:id", (req, res) => {
+router.get("/admin/user/:id", auth.isAdmin, (req, res) => {
   console.log("getting user ...");
   User.findById(req.params.id)
     .populate("posts")
@@ -27,7 +28,7 @@ router.get("/user/:id", (req, res) => {
     });
 });
 
-router.put("/admin/block/:id", function (req, res) {
+router.put("/admin/block/:id", auth.isAdmin, function (req, res) {
   User.findByIdAndUpdate(req.params.id, { blocked: true }, function (err) {
     if (err) {
       res.status(400).send({ msg: "something went wrong" });
@@ -36,7 +37,7 @@ router.put("/admin/block/:id", function (req, res) {
     }
   });
 });
-router.put("/admin/unblock/:id", function (req, res) {
+router.put("/admin/unblock/:id", auth.isAdmin, function (req, res) {
   User.findByIdAndUpdate(req.params.id, { blocked: false }, function (err) {
     if (err) {
       res.status(400).send({ msg: "something went wrong" });
@@ -46,7 +47,7 @@ router.put("/admin/unblock/:id", function (req, res) {
   });
 });
 
-router.put("/admin/edit/:id", function (req, res) {
+router.put("/admin/edit/:id", auth.isAdmin, function (req, res) {
   User.findByIdAndUpdate(req.params.id, req.body, function (err) {
     if (err) {
       res.status(400).send({ msg: "something went wrong" });
@@ -55,4 +56,5 @@ router.put("/admin/edit/:id", function (req, res) {
     }
   });
 });
+
 module.exports = router;

@@ -5,17 +5,21 @@ const smtpTransport = require("nodemailer-smtp-transport");
 const User = require("../models/user");
 const Token = require("../models/token");
 const { cloudinary } = require("../utills/cloudinary.js");
+const auth = require("../middleware/auth");
 const router = express.Router();
 // require("dotenv").config();
 
 router.post("/signup", (req, res) => {
   console.log("registration started");
   const { email, firstName, lastName, username, password } = req.body;
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
   const newUser = new User({
     email,
     firstName,
     lastName,
     username,
+    registerd_ip_address: ip,
   });
 
   User.findOne({ email: email }, (err, foundUser) => {
@@ -190,6 +194,7 @@ router.get("/user", (req, res) => {
   console.log("getting user ...");
   res.status(200).send(req.user);
 });
+
 router.get("/logout", (req, res) => {
   console.log("logging out...");
   req.logOut();
@@ -197,11 +202,12 @@ router.get("/logout", (req, res) => {
 });
 
 router.post("/login", (req, res, next) => {
-  console.log(req.body, "credentials");
-  passport.authenticate("local", function (err, user, info) {
-    console.log(user);
-    console.log(info);
-    console.log(err);
+  // console.log(req.ip);
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  // console.log(ip); // ip address of the user
+
+  console.log(req.ip);
+  passport.authenticate("local", function (err, user) {
     if (err) {
       return next(err);
     }
@@ -212,13 +218,15 @@ router.post("/login", (req, res, next) => {
       if (err) {
         return next(err);
       }
-      console.log("created");
+      user.last_login_date = Date.now();
+      user.last_login_ipaddress = ip;
+      user.save();
       res.status(200).send({ msg: "logged in", user: req.user });
     });
   })(req, res, next);
 });
 
-router.put("/update", function (req, res) {
+router.put("/update", auth.isAuthenticated, function (req, res) {
   User.findByIdAndUpdate(req.user._id, req.body, function (err, updateduser) {
     if (err) {
       res.status(400).send({ msg: "no user found" });
@@ -236,7 +244,7 @@ router.put("/update", function (req, res) {
   });
 });
 
-router.post("/upload", (req, res) => {
+router.post("/upload", auth.isAuthenticated, (req, res) => {
   User.findById(req.user._id, async (err, foundUser) => {
     if (err) {
       res.status(400).send({ msg: "no user found" });

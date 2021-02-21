@@ -2,9 +2,10 @@ const express = require("express");
 const User = require("../models/user");
 const Post = require("../models/post");
 const Comments = require("../models/comments");
+const auth = require("../middleware/auth");
 const router = express.Router();
 
-router.post("/comment/:postID", (req, res) => {
+router.post("/comment/:postID", auth.isAuthenticated, (req, res) => {
   const { text } = req.body;
   Post.findById(req.params.postID)
     .populate("comments")

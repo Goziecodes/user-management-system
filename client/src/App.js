@@ -31,30 +31,37 @@ const UnauthenticatedRoutes = () => (
         <Login />
       </AppShell>
     </Route>
+
     <Route path="/signup">
       <AppShell>
         <SignUp />
       </AppShell>
     </Route>
+
     <Route exact path="/verify">
       <Verify />
     </Route>
+
     <Route exact path="/forgot">
       <Forgot />
     </Route>
+
     <Route exact path="/reset">
       <ResetPassword />
     </Route>
+
     <Route exact path="/">
       <AppShell>
         <Home />
       </AppShell>
     </Route>
+
     <Route exact path="/admin">
       <AppShell>
         <Admin />
       </AppShell>
     </Route>
+
     <Route exact path="/admin/more">
       <AppShell>
         <AdminMore />
@@ -69,7 +76,7 @@ const AuthenticatedRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={() =>
-        !!auth.isAuthenticated() ? (
+        auth.isAuthenticated() ? (
           <AppShell>{children}</AppShell>
         ) : (
           <Redirect to="/" />
@@ -79,28 +86,36 @@ const AuthenticatedRoute = ({ children, ...rest }) => {
   );
 };
 
-// const AdminRoute = ({ children, ...rest }) => {
-//   const auth = useContext(AuthContext);
-//   const { authState } = auth;
+const AdminRoute = ({ children, ...rest }) => {
+  const auth = useContext(AuthContext);
 
-//   return (
-//     <Route
-//       {...rest}
-//       render={() =>
-//         auth.isAdmin() ? <AppShell>{children}</AppShell> : <Redirect to="/" />
-//       }
-//     ></Route>
-//   );
-// };
+  return (
+    <Route
+      {...rest}
+      render={() =>
+        auth.isAdmin() ? (
+          <AppShell>{children}</AppShell>
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    ></Route>
+  );
+};
 
 const AppRoutes = () => {
   return (
     <>
       <Suspense fallback={<LoadingFallback />}>
         <Switch>
-          {/* <AdminRoute path="/new">
-            <NewPost />
-          </AdminRoute> */}
+          <AdminRoute path="/admin">
+            <Admin />
+          </AdminRoute>
+
+          <AdminRoute path="/admin/more">
+            <AdminMore />
+          </AdminRoute>
+
           <AuthenticatedRoute path="/new">
             <NewPost />
           </AuthenticatedRoute>
@@ -109,15 +124,14 @@ const AppRoutes = () => {
             <PostPage />
           </AuthenticatedRoute>
 
-          {/* <AuthenticatedRoute path="/post">
-            <PostPage />
-          </AuthenticatedRoute> */}
           <AuthenticatedRoute path="/profile">
             <ProfilePage />
           </AuthenticatedRoute>
+
           <AuthenticatedRoute path="/upload">
             <UploadPicture />
           </AuthenticatedRoute>
+
           <UnauthenticatedRoutes />
         </Switch>
       </Suspense>

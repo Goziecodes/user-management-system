@@ -10,8 +10,10 @@ const indexRoutes = require("./routes/index");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
 const adminRoutes = require("./routes/admin");
+const apiRoutes = require("./routes/api");
 
 const app = express();
+app.set("trust proxy", true);
 
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,6 +52,7 @@ app.use(indexRoutes);
 app.use(postRoutes);
 app.use(commentRoutes);
 app.use(adminRoutes);
+app.use(apiRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

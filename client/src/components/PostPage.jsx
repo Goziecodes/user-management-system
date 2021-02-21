@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 function PostPage(props) {
   const [comments, setComments] = useState([]);
   const [post, setPost] = useState([]);
+
+  const history = useHistory();
+
   const search = useLocation().search;
   const postId = new URLSearchParams(search).get("postId");
   // const post = props.location.state.post;
@@ -26,13 +29,15 @@ function PostPage(props) {
         data: values,
         withCredentials: true,
         url: `http://localhost:5000/comment/${postId}`,
-      }).then((res) => {
-        if (res.status === 200) {
-          setComments(res.data);
-        } else {
-          props.history.push("/verify");
-        }
-      });
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            setComments(res.data);
+          }
+        })
+        .catch((error) => {
+          error.response.status === 400 && history.push("/login");
+        });
     },
   });
 
@@ -42,15 +47,17 @@ function PostPage(props) {
       data: { id: postId },
       withCredentials: true,
       url: `http://localhost:5000/posts/${postId}`,
-    }).then((res) => {
-      if (res.status === 200) {
-        setPost(res.data);
-        setComments(() => res.data.comments);
-        // setComments(() => post.comments);
-      } else {
-        props.history.push("/verify");
-      }
-    });
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setPost(res.data);
+          setComments(() => res.data.comments);
+          // setComments(() => post.comments);
+        }
+      })
+      .catch((error) => {
+        error.response.status === 400 && history.push("/login");
+      });
   }, [post.comments, postId, props.history]);
   return (
     <>
@@ -64,8 +71,8 @@ function PostPage(props) {
                 src="https://dummyimage.com/1200x500"
               />
             </div> */}
-            <div className="flex flex-col sm:flex-row mt-10">
-              <div className="sm:w-1/3 text-center sm:pr-8 sm:py-8">
+            <div className="flex flex-col  mt-10">
+              <div className="text-center ">
                 <div className="w-20 h-20 rounded-full inline-flex items-center justify-center bg-gray-200 text-gray-400">
                   <svg
                     fill="none"
@@ -89,7 +96,7 @@ function PostPage(props) {
                 </div>
                 <span className="mt-1 text-gray-500 text-sm">12 Jun 2019</span>
               </div>
-              <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 sm:text-left">
+              <div className=" sm:pl-8 sm:py-8  border-gray-200  border-t mt-4 pt-4 ">
                 <p className="leading-relaxed text-md ">{post?.body}</p>
               </div>
             </div>

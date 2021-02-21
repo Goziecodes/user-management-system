@@ -24,14 +24,15 @@ function NewPost(props) {
         data: values,
         withCredentials: true,
         url: "http://localhost:5000/posts",
-      }).then((res) => {
-        if (res.status === 200) {
-          // console.log(`meee ${JSON.stringify(res)}`);
-          history.push("/");
-        } else {
-          history.push("/login");
-        }
-      });
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            history.push("/");
+          }
+        })
+        .catch((error) => {
+          error.response.status === 400 && history.push("/login");
+        });
     },
   });
 
